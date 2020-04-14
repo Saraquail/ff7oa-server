@@ -18,7 +18,6 @@ const MonstersService = {
       'mon.steal',
       'mon.drops',
       'mon.enemy_skill',
-      'usr.id',
       'usr.user_name'
       )
       .from('ff7oa_monsters AS mon')
@@ -36,10 +35,10 @@ const MonstersService = {
   },
 
   serializeMonster(monster) {
-    const { user_id } = monster
+    // const { user_id } = monster
     return {
       id: monster.id,
-      user_id: user_id,
+      user_id: monster.user_id,
       name: xss(monster.name),
       hp: monster.hp,
       mp: monster.mp,

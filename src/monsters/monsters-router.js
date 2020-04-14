@@ -44,4 +44,31 @@ monstersRouter
         .catch(next)
   })
 
+monstersRouter
+  .route('/:monster_id')
+  .all((req, res, next) => {
+
+    MonstersService.getById(
+      req.app.get('db'),
+      req.params.monster_id
+    )
+      .then(monster => {
+        if(!monster) {
+          return res  
+            .status(404)
+            .json({
+              error: { message: 'Monster does not exist' }
+            })
+        }
+        res.monster = monster
+        next()
+      })
+      .catch(next)
+  })
+
+  .get((req, res) => {
+    res.json(MonstersService.serializeMonster(res.monster))
+  })
+
+
   module.exports = monstersRouter
