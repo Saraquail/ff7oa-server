@@ -5,10 +5,8 @@ const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const app = express()
 const monstersRouter = require('./monsters/monsters-router')
+const guidesRouter = require('./guides/guides-router')
 
-const morganOption = (NODE_ENV === 'production')
-  ? 'tiny'
-  : 'common';
 
 app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'common', {
   skip: () => NODE_ENV === 'test',
@@ -18,7 +16,7 @@ app.use(cors())
 
 
 app.use('/api/monsters', monstersRouter)
-//app.use('/api/guides', guidesRouter)
+app.use('/api/guides', guidesRouter)
 //app.use('/api/auth', authRouter)
 
 app.use((error, req, res, next) => {

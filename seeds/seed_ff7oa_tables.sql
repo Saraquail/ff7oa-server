@@ -1,14 +1,17 @@
 BEGIN; 
 
--- TRUNCATE
-  -- ff7oa_users,
-  -- ff7oa_monsters;
-  -- ff7oa_guides;
+TRUNCATE
+  ff7oa_users,
+  ff7oa_monsters,
+  ff7oa_guides
+  RESTART IDENTITY CASCADE;
+
 
 INSERT INTO ff7oa_users 
   (user_name, password)
   VALUES
-  ('guest', 'guest');
+  ('guest', 'guest'),
+  ('admin', 'saraquail');
 
 INSERT INTO ff7oa_monsters
   (user_id, name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill)
@@ -52,5 +55,11 @@ INSERT INTO ff7oa_monsters
     'Protect Vest',
     'N/A'
     );
+
+INSERT INTO ff7oa_guides 
+  (user_id, monster_id, note, name)
+  VALUES
+  (1, 2, 'next boss', 'don''t forget'),
+  (2, 3, 'tarsting', 'bloofed');
 
     COMMIT;

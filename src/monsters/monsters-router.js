@@ -18,8 +18,30 @@ monstersRouter
       .catch(next)
   })
 
-  //.post(parser, (req, res, next) => {
-  //   const 
-  // })
+  .post(parser, (req, res, next) => {
+    const { name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill } = req.body
+    const newMonster = { name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill }
+
+    for (const [key, value] of Object.entries(newMonster))
+    if (!value)
+      return res.status(400).json({
+        error: `Missing '${key}'`
+      })
+
+      newMonster.id = req.body.id
+      newMonster.user_id = req.body.user_id
+
+      MonstersService.insertMonster(
+        req.app.get('db'),
+        newMonster
+      )
+        .then(monster => {
+          res
+            .status(201)
+            .location(path.posix.join(req.originalUrl, `/${monster.id}`))
+            .json(MonstersService.serializeMonster(monster))
+        })
+        .catch(next)
+  })
 
   module.exports = monstersRouter
