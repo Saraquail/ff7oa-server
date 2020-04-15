@@ -31,6 +31,15 @@ const UsersService = {
       .then(user => !!user)
   },
 
+  getUserIdByName(db, user_name) {
+    return db
+      .from('ff7oa_users AS users')
+      .select('users.id')
+      .where({user_name})
+      .first()
+  },
+
+
   insertUser(db, newUser) {
     return db
       .insert(newUser)

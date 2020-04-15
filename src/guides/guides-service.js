@@ -21,6 +21,14 @@ const GuidesService = {
       monster_id: guide.monster_id
     }
   },
+
+  insertGuide(db, newGuide) {
+    return db
+      .insert(newGuide)
+      .into('ff7oa_guides')
+      .returning('*')
+      .then(([guide]) => guide)
+  }
 }
 
 module.exports = GuidesService

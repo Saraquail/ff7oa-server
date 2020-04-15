@@ -64,6 +64,7 @@ const MonstersService = {
         MonstersService.getById(db, monster.id)
         )
   },
+
 }
 
 module.exports = MonstersService

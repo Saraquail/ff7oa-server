@@ -11,13 +11,13 @@ INSERT INTO ff7oa_users
   (user_name, password)
   VALUES
   ('guest', '$2a$12$B4PcXilPboWXbDV9accQoOyfu9QRTy743liQYSzx5JSDSq288xNam'),
-  ('admin', '$2a$12$YgrSZjwovCeSNBKOr3i39Og6wcrGpq/Ye8NLVpEvRZMs9mbVntO2G'),
+  ('saraquail', '$2a$12$YgrSZjwovCeSNBKOr3i39Og6wcrGpq/Ye8NLVpEvRZMs9mbVntO2G'),
   ('test', '$2a$12$BJixN/N12F24ypiqwfvvc.lKNzHotMP5VL2qFPpYq.oj.5KUJJ2Cq');
 
 INSERT INTO ff7oa_monsters
   (user_id, name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill)
   VALUES
-    (1, 'Airbuster', 
+    (2, 'Airbuster', 
     1200, 
     0, 
     180, 
@@ -30,7 +30,7 @@ INSERT INTO ff7oa_monsters
     'Titan Bangle',
     'N/A'
     ),
-    (1, 'Midgar Zolom', 
+    (2, 'Midgar Zolom', 
     4000, 
     348, 
     250, 
@@ -43,7 +43,7 @@ INSERT INTO ff7oa_monsters
     'N/A',
     'Beta'
     ),
-    (1, 'Rufus',
+    (2, 'Rufus',
     500,
     0,
     240,
