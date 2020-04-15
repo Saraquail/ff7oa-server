@@ -12,6 +12,9 @@
     "migrate": "postgrator --config postgrator-config.js",
     "migrate:test": "end NODE_ENV=test npm run migrate"
   },
+  "engines": {
+    "node": "13.8.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -10,8 +10,9 @@ TRUNCATE
 INSERT INTO ff7oa_users 
   (user_name, password)
   VALUES
-  ('guest', 'guest'),
-  ('admin', 'saraquail');
+  ('guest', '$2a$12$B4PcXilPboWXbDV9accQoOyfu9QRTy743liQYSzx5JSDSq288xNam'),
+  ('admin', '$2a$12$YgrSZjwovCeSNBKOr3i39Og6wcrGpq/Ye8NLVpEvRZMs9mbVntO2G'),
+  ('test', '$2a$12$BJixN/N12F24ypiqwfvvc.lKNzHotMP5VL2qFPpYq.oj.5KUJJ2Cq');
 
 INSERT INTO ff7oa_monsters
   (user_id, name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill)
@@ -63,3 +64,5 @@ INSERT INTO ff7oa_guides
   (2, 3, 'tarsting', 'bloofed');
 
     COMMIT;
+
+    

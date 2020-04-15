@@ -19,8 +19,10 @@ monstersRouter
   })
 
   .post(parser, (req, res, next) => {
-    const { name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill } = req.body
+    const { name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill } = req.body.monster
     const newMonster = { name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill }
+    console.log(name)
+
 
     for (const [key, value] of Object.entries(newMonster))
     if (!value)
