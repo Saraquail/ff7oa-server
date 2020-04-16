@@ -6,34 +6,35 @@ const guidesRouter = express.Router()
 const parser = express.json()
 
 guidesRouter
-  .route('/:user_id')
+  .route('/:user_name')
 
   .get((req, res, next) => {
-    const user_name = req.body.user_name
+
+    const user_name = req.params.user_name
+    
     user_id = UsersService.getUserIdByName(req.app.get('db'), user_name)
+
     GuidesService.getAllGuides(req.app.get('db'), user_id)
-      .then(guides => {
-        res.json(guides.map(GuidesService.serializeGuides))
+      .then(guide => {
+        res.json(guide)
       })
       .catch(next)
   })
 
   .post(parser, (req, res, next) => {
-    const { name, note } = req.body.guide
-    const user_name = req.body.user_name
+    const { name, note, monster_id } = req.body.guide
+    const user_name = req.params.user_name
+console.log(req.body.guide)
+    const newGuide = { name, note, monster_id }
 
-    const newGuide = { name, note }
-
-    for (const [key, value] of Object.entries(newMonster)) {
+    for (const [key, value] of Object.entries(newGuide)) {
       if (!value)
         {return res.status(400).json({
           error: `Missing '${key}'`
         })}
     }
 
-    user_id = UsersService.getUserIdByName(req.app.get('db'), user_name)
-
-    newGuide.user_id = user_id
+    newGuide.user_id = UsersService.getUserIdByName(req.app.get('db'), user_name)
 
     GuidesService.insertGuide(
       req.app.get('db'),
@@ -42,7 +43,7 @@ guidesRouter
       .then(guide => {
         res
           .status(201)
-          .location(path.posix.join(req.originalUrl, `/${user.id}`))
+          .location(path.posix.join(req.originalUrl, `/${user_name}`))
           .json(GuidesService.serializeGuides(guide))
       })
       .catch(next)

@@ -5,6 +5,8 @@ const GuidesService = {
     return db
       .from('ff7oa_guides AS guide')
       .select(
+        'guide.id',
+        'user_id',
         'guide.name',
         'guide.note',
         'guide.monster_id'
