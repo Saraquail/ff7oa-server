@@ -6,11 +6,12 @@
   "scripts": {
     "test": "mocha --require test/setup.js",
     "start": "node src/server.js",
-    "predeploy": "npm audit",
+    "predeploy": "npm audit && npm run migrate:production",
     "deploy": "git push heroku master",
     "dev": "nodemon src/server.js",
     "migrate": "postgrator --config postgrator-config.js",
-    "migrate:test": "end NODE_ENV=test npm run migrate"
+    "migrate:test": "end NODE_ENV=test npm run migrate",
+    "migrate:production": "env SSL=true DATABASE_URL=$(heroku config:get DATABASE_URL) npm run migrate"
   },
   "engines": {
     "node": "13.8.0"
