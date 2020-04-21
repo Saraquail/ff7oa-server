@@ -33,8 +33,5 @@ app.use((error, req, res, next) => {
   res.status(500).json(message)
 })
 
-app.get('/', (req, res) => {
-  res.send('Hello, boilerplate!')
-})
 
 module.exports = app

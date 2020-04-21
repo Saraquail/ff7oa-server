@@ -1,0 +1,248 @@
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
+
+  function makeUsersArray() {
+    return [
+      {
+        id: 1,
+        user_name: 'test-user-1',
+        password: 'password',
+      },
+      {
+        id: 2,
+        user_name: 'test-user-2',
+        password: 'password',
+      },
+      {
+        id: 3,
+        user_name: 'test-user-3',
+        password: 'password',
+      },
+    ]
+  }
+
+  
+  function makeMonstersArray(users) {
+    return [
+      {
+        id: 1,
+        user_id: users[1].id,
+        name: 'test-monster-3',
+        hp: 10,
+        mp: 10,
+        exp: 10,
+        gil: 10,
+        weakness: 'weakness',
+        strength: 'fire',
+        location: 'test',
+        level: 1,
+        steal: 'test',
+        drops: 'test',
+        enemy_skill: 'test',
+      }, 
+      {
+        id: 2,
+        user_id: users[0].id,
+        name: 'test-monster-3',
+        hp: 10,
+        mp: 10,
+        exp: 10,
+        gil: 10,
+        weakness: 'weakness',
+        strength: 'fire',
+        location: 'test',
+        level: 1,
+        steal: 'test',
+        drops: 'test',
+        enemy_skill: 'test',
+      },
+      {
+        id: 3,
+        user_id: users[1].id,
+        name: 'test-monster-3',
+        hp: 10,
+        mp: 10,
+        exp: 10,
+        gil: 10,
+        weakness: 'weakness',
+        strength: 'fire',
+        location: 'test',
+        level: 1,
+        steal: 'test',
+        drops: 'test',
+        enemy_skill: 'test',
+      },
+    ]
+  }
+
+  function makeGuidesArray(users, monsters) {
+    return [
+      {
+        user_id: users[0].id,
+        monster_id: monsters[0].id,
+        note: 'test note1',
+        name: 'test name1',
+      },
+      {
+        user_id: users[1].id,
+        monster_id: monsters[2].id,
+        note: 'test note2',
+        name: 'test name2',
+      },
+      {
+        user_id: users[0].id,
+        monster_id: monsters[1].id,
+        note: 'test note3',
+        name: 'test name3',
+      },
+    ]
+  }
+
+  function makeExpectedMonster(users, monster) {
+    const user = users.find(user => user.id === monster.user_id)
+
+    return {
+      id: monster.id,
+      user_id: user.id,
+      name: monster.name,
+      hp: monster.hp,
+      mp: monster.mp,
+      exp: monster.exp,
+      gil: monster.gil,
+      weakness:  monster.weakness,
+      strength: monster.strength,
+      location: monster.location,
+      level: monster.level,
+      steal: monster.steal,
+      drops: monster.drops,
+      enemy_skill: monster.enemy_skill
+    }
+  }
+
+  function makeMaliciousMonster(user) {
+    const maliciousMonster = {
+      id: 911,
+      user_id: user.id,
+      name: 'evil <script>alert("xss");</script>',
+      hp: 10,
+      mp: 10,
+      exp: 10,
+      gil: 10,
+      weakness: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
+      strength: 'evil <script>alert("xss");</script>',
+      location: 'evil <script>alert("xss");</script>',
+      level: 1,
+      steal: 'evil <script>alert("xss");</script>',
+      drops: 'evil <script>alert("xss");</script>',
+      enemy_skill: 'evil <script>alert("xss");</script>',
+    }
+
+    const expectedMonster = {
+      ...makeExpectedMonster([user], maliciousMonster),
+      weakness: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
+      strength: '&lt;script&gt;alert(\"xss\");&lt;/script&gt',
+      location: '&lt;script&gt;alert(\"xss\");&lt;/script&gt',
+      steal: '&lt;script&gt;alert(\"xss\");&lt;/script&gt',
+      drops: '&lt;script&gt;alert(\"xss\");&lt;/script&gt',
+      enemy_skill: '&lt;script&gt;alert(\"xss\");&lt;/script&gt'
+    }
+
+    return {
+      maliciousMonster,
+      expectedMonster
+    }
+  }
+
+  function makeMonstersFixtures() {
+    const testUsers = makeUsersArray()
+    const testMonsters = makeMonstersArray(testUsers)
+    const testGuides = makeGuidesArray(testUsers, testMonsters)
+
+    return {
+      testUsers,
+      testMonsters,
+      testGuides
+    }
+  }
+
+  function cleanTables(db) {
+    return db.transaction(trx => 
+      trx.raw(
+        `TRUNCATE
+        ff7oa_users,
+        ff7oa_monsters,
+        ff7oa_guides`
+      )
+        .then(() => 
+          Promise.all([
+            trx.raw(`ALTER SEQUENCE ff70a_users_id_seq minvalue 0 START WITH 1`),
+            trx.raw(`ALTER SEQUENCE ff70a_monsters_id_seq minvalue 0 START WITH 1`),
+            trx.raw(`ALTER SEQUENCE ff70a_guides_id_seq minvalue 0 START WITH 1`),
+            trx.raw(`SELECT setval('ff7oa_users_id_seq', 0)`),
+            trx.raw(`SELECT setval('ff7oa_monsters_id_seq', 0)`),
+            trx.raw(`SELECT setval('ff7oa_guides_id_seq', 0)`),
+          ])
+        )
+    )
+  }
+
+  function seedUsers(db, users) {
+    const preppedUsers = users.map(user => ({
+      ...user,
+      password: bcrypt.hashSync(user.password, 1)
+    }))
+
+    return db.into('ff7oa_users').insert(preppedUsers)
+      .then(() => 
+        //update auto sequence to stay in sync
+        db.raw(
+          `SELECT setval ('ff7oa_users')`, [users[users.length - 1].id]
+        )
+      )
+  }
+
+  function seedMonstersTables(db, users, monsters) {
+    //group queries and rollback on failure
+    return db.transaction(async trx => {
+      await seedUsers(trx, users)
+      await trx.into('ff7oa_monsters').insert(monsters)
+      //update auto-seq to match forced id
+      await trx.raw(
+        `SELECT setval ('ff7oa_monsters_id_seq', ?)`,
+        [monsters[monster.length  - 1].id]
+      )
+    })
+  }
+
+  function seedMaliciousMonster(db, user, monster) {
+    return seedUsers(db, [user])
+      .then(() => 
+        db  
+          .into('ff7oa_monsters')
+          .insert([monster])
+      )
+  }
+
+  function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
+    const token = jwt.sign(
+      { user_id: user.id }, secret, 
+      { subject: user.user_name, algorithm: 'HS256' }
+    )
+
+    return `Bearer ${token}`
+  }
+
+  module.exports = {
+    makeUsersArray,
+    makeMonstersArray,
+    makeGuidesArray,
+    makeExpectedMonster,
+    makeMaliciousMonster,
+    makeMonstersFixtures,
+    cleanTables,
+    seedUsers,
+    seedMonstersTables,
+    seedMaliciousMonster,
+    makeAuthHeader
+  }
