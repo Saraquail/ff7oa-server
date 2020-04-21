@@ -29,23 +29,34 @@ monstersRouter
           error: `Missing '${key}'`
         })}
     }
-      newMonster.id = req.body.id
+    newMonster.id = req.body.id
 
-      user_id = UsersService.getUserIdByName(req.app.get('db'), req.body.user_name)
+    user_id = UsersService.getUserIdByName(req.app.get('db'), req.body.user_name)
 
-      newMonster.user_id = user_id
+    newMonster.user_id = user_id
 
-      MonstersService.insertMonster(
-        req.app.get('db'),
-        newMonster
-      )
-        .then(monster => {
-          res
-            .status(201)
-            .location(path.posix.join(req.originalUrl, `/${monster.id}`))
-            .json(MonstersService.serializeMonster(monster))
-        })
-        .catch(next)
+    MonstersService.doesMonsterExist(
+      req.app.get('db'), name)
+      .then(doesMonsterExist => {
+        if(doesMonsterExist) {
+          console.log(doesMonsterExist)
+          return res.status(400).json({
+            error: 'Monster already exists'
+          })
+        }
+      
+        MonstersService.insertMonster(
+          req.app.get('db'),
+          newMonster
+        )
+          .then(monster => {
+            res
+              .status(201)
+              .location(path.posix.join(req.originalUrl, `/${monster.id}`))
+              .json(MonstersService.serializeMonster(monster))
+          })
+      })
+      .catch(next)
   })
 
 monstersRouter

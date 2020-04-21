@@ -34,6 +34,13 @@ const MonstersService = {
       .first()
   },
 
+  doesMonsterExist(db, name) {
+    return db('ff7oa_monsters')
+      .where({ name })
+      .first()
+      .then(monster => !!monster)
+  },
+
   serializeMonster(monster) {
     // const { user_id } = monster
     return {
