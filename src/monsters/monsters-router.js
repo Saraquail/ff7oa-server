@@ -2,6 +2,8 @@ const express = require('express')
 const path = require('path')
 const MonstersService = require('./monsters-service')
 const UsersService = require('../users/users-service')
+const { requireAuth } = require('../middleware/jwt-auth')
+
 
 const monstersRouter = express.Router()
 const parser = express.json()
@@ -19,7 +21,7 @@ monstersRouter
       .catch(next)
   })
 
-  .post(parser, (req, res, next) => {
+  .post(requireAuth, parser, (req, res, next) => {
     const { name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill } = req.body.monster
     const newMonster = { name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill }
 

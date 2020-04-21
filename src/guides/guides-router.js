@@ -2,12 +2,13 @@ const express = require('express')
 const path = require('path')
 const GuidesService = require('./guides-service')
 const UsersService = require('../users/users-service')
+const { requireAuth } = require('../middleware/jwt-auth')
 const guidesRouter = express.Router()
 const parser = express.json()
 
 guidesRouter
   .route('/:user_name')
-
+  .all(requireAuth)
   .get((req, res, next) => {
 
     const user_name = req.params.user_name
