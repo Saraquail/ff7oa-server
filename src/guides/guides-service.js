@@ -30,6 +30,12 @@ const GuidesService = {
       .into('ff7oa_guides')
       .returning('*')
       .then(([guide]) => guide)
+  },
+  
+  deleteGuide(db, id) {
+    return db('ff7oa_guides')
+      .where({ id })
+      .delete()
   }
 }
 
