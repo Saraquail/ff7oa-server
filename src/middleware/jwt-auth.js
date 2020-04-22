@@ -22,7 +22,7 @@ function requireAuth(req, res, next) {
     )
       .then(user => {
         if(!user)
-          return req.status(401).json({
+          return res.status(401).json({
             error: 'You must be logged in to use this feature'
           })
           req.user = user

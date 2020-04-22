@@ -28,7 +28,7 @@ const jwt = require('jsonwebtoken')
       {
         id: 1,
         user_id: users[1].id,
-        name: 'test-monster-3',
+        name: 'test-monster-1',
         hp: 10,
         mp: 10,
         exp: 10,
@@ -44,7 +44,7 @@ const jwt = require('jsonwebtoken')
       {
         id: 2,
         user_id: users[0].id,
-        name: 'test-monster-3',
+        name: 'test-monster-2',
         hp: 10,
         mp: 10,
         exp: 10,
@@ -174,16 +174,7 @@ const jwt = require('jsonwebtoken')
         ff7oa_monsters,
         ff7oa_guides`
       )
-        .then(() => 
-          Promise.all([
-            trx.raw(`ALTER SEQUENCE ff70a_users_id_seq minvalue 0 START WITH 1`),
-            trx.raw(`ALTER SEQUENCE ff70a_monsters_id_seq minvalue 0 START WITH 1`),
-            trx.raw(`ALTER SEQUENCE ff70a_guides_id_seq minvalue 0 START WITH 1`),
-            trx.raw(`SELECT setval('ff7oa_users_id_seq', 0)`),
-            trx.raw(`SELECT setval('ff7oa_monsters_id_seq', 0)`),
-            trx.raw(`SELECT setval('ff7oa_guides_id_seq', 0)`),
-          ])
-        )
+        
     )
   }
 
@@ -193,13 +184,15 @@ const jwt = require('jsonwebtoken')
       password: bcrypt.hashSync(user.password, 1)
     }))
 
-    return db.into('ff7oa_users').insert(preppedUsers)
-      .then(() => 
-        //update auto sequence to stay in sync
-        db.raw(
-          `SELECT setval ('ff7oa_users')`, [users[users.length - 1].id]
-        )
-      )
+    return db
+      .into('ff7oa_users')
+      .insert(preppedUsers)
+      // .then(() => 
+      //   //update auto sequence to stay in sync
+      //   db.raw(
+      //     `SELECT setval ('ff7oa_users')`, [users[users.length - 1].id]
+      //   )
+      // )
   }
 
   function seedMonstersTables(db, users, monsters) {
@@ -207,11 +200,6 @@ const jwt = require('jsonwebtoken')
     return db.transaction(async trx => {
       await seedUsers(trx, users)
       await trx.into('ff7oa_monsters').insert(monsters)
-      //update auto-seq to match forced id
-      await trx.raw(
-        `SELECT setval ('ff7oa_monsters_id_seq', ?)`,
-        [monsters[monster.length  - 1].id]
-      )
     })
   }
 
@@ -233,6 +221,33 @@ const jwt = require('jsonwebtoken')
     return `Bearer ${token}`
   }
 
+  function makePostTestMonster() {
+    return {
+      user_id: 1,
+      name: 'test-monster-4',
+      hp: 10,
+      mp: 10,
+      exp: 10,
+      gil: 10,
+      weakness: 'weakness',
+      strength: 'fire',
+      location: 'test',
+      level: 1,
+      steal: 'test',
+      drops: 'test',
+      enemy_skill: 'test',
+    }
+  }
+
+  function makePostTestGuide() {
+    return {
+      user_id: 1,
+      monster_id: 2,
+      note: 'test note3',
+      name: 'test name3',
+    }
+  }
+
   module.exports = {
     makeUsersArray,
     makeMonstersArray,
@@ -244,5 +259,7 @@ const jwt = require('jsonwebtoken')
     seedUsers,
     seedMonstersTables,
     seedMaliciousMonster,
-    makeAuthHeader
+    makeAuthHeader,
+    makePostTestMonster,
+    makePostTestGuide
   }
