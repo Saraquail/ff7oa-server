@@ -54,10 +54,11 @@ console.log(req.body.guide)
   .route('/:user_name/:guide_id')
 
   .delete((req, res, next) => {
+    
+
     GuidesService.deleteGuide(
       req.app.get('db'),
-      req.params.guide_id,
-    )
+      req.params.guide_id)
       .then(rows => {
         res.status(204).end()
       })

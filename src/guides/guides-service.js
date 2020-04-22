@@ -35,6 +35,7 @@ const GuidesService = {
   deleteGuide(db, id) {
     return db('ff7oa_guides')
       .where({ id })
+      .first()
       .delete()
   }
 }
