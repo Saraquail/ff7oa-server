@@ -23,9 +23,9 @@ guidesRouter
   })
 
   .post(parser, (req, res, next) => {
+
     const { name, note, monster_id } = req.body.guide
     const user_name = req.params.user_name
-console.log(req.body.guide)
     const newGuide = { name, note, monster_id }
 
     for (const [key, value] of Object.entries(newGuide)) {
@@ -44,7 +44,7 @@ console.log(req.body.guide)
       .then(guide => {
         res
           .status(201)
-          .location(path.posix.join(req.originalUrl, `/${user_name}`))
+          .location(path.posix.join(req.originalUrl))
           .json(GuidesService.serializeGuides(guide))
       })
       .catch(next)

@@ -240,12 +240,13 @@ const jwt = require('jsonwebtoken')
   }
 
   function makePostTestGuide() {
-    return {
+    let guide = {
       user_id: 1,
       monster_id: 2,
+      name: 'test-name3',
       note: 'test note3',
-      name: 'test name3',
     }
+    return guide
   }
 
   module.exports = {

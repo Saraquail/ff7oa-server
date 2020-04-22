@@ -41,7 +41,6 @@ monstersRouter
       req.app.get('db'), name)
       .then(doesMonsterExist => {
         if(doesMonsterExist) {
-          console.log(doesMonsterExist)
           return res.status(400).json({
             error: 'Monster already exists'
           })
