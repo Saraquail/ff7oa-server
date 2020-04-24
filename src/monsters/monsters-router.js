@@ -3,8 +3,6 @@ const path = require('path')
 const MonstersService = require('./monsters-service')
 const UsersService = require('../users/users-service')
 const { requireAuth } = require('../middleware/jwt-auth')
-
-
 const monstersRouter = express.Router()
 const parser = express.json()
 
@@ -35,11 +33,12 @@ monstersRouter
           error: `Missing '${key}'`
         })}
     }
-    // newMonster.id = req.body.id
 
-    user_id = UsersService.getUserIdByName(req.app.get('db'), user_name)
+    newMonster.user_id = UsersService.getUserIdByName(
+      req.app.get('db'),
+      user_name
+      )
 
-    newMonster.user_id = user_id
     MonstersService.doesMonsterExist(
       req.app.get('db'), name)
       .then(doesMonsterExist => {
@@ -62,7 +61,7 @@ monstersRouter
               .json({ ...monster, user_name })
           })
       })
-      .catch(next)
+    .catch(next)
   })
 
 monstersRouter
@@ -90,6 +89,5 @@ monstersRouter
   .get((req, res) => {
     res.json(MonstersService.serializeMonster(res.monster))
   })
-
 
   module.exports = monstersRouter

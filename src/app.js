@@ -15,7 +15,6 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'common', {
 app.use(helmet())
 app.use(cors())
 
-
 app.use('/api/monsters', monstersRouter)
 app.use('/api/guides', guidesRouter)
 app.use('/api/auth', authRouter)
@@ -32,6 +31,5 @@ app.use((error, req, res, next) => {
   }
   res.status(500).json(message)
 })
-
 
 module.exports = app

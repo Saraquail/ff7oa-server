@@ -21,12 +21,13 @@ function requireAuth(req, res, next) {
       payload.sub
     )
       .then(user => {
-        if(!user)
+        if(!user) {
           return res.status(401).json({
             error: 'You must be logged in to use this feature'
           })
-          req.user = user
-          next()
+        }
+        req.user = user
+        next()
       })
       .catch(err => {
         console.error(err)

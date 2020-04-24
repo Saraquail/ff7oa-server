@@ -23,7 +23,6 @@ guidesRouter
   })
 
   .post(parser, (req, res, next) => {
-
     const { name, note, monster_id } = req.body.guide
     const user_name = req.params.user_name
     const newGuide = { name, note, monster_id }
@@ -35,7 +34,10 @@ guidesRouter
         })}
     }
 
-    newGuide.user_id = UsersService.getUserIdByName(req.app.get('db'), user_name)
+    newGuide.user_id = UsersService.getUserIdByName(
+      req.app.get('db'),
+      user_name
+      )
 
     GuidesService.insertGuide(
       req.app.get('db'),
@@ -52,10 +54,7 @@ guidesRouter
 
   guidesRouter
   .route('/:user_name/:guide_id')
-
   .delete((req, res, next) => {
-    
-
     GuidesService.deleteGuide(
       req.app.get('db'),
       req.params.guide_id)

@@ -1,5 +1,4 @@
 const REGEX_UPPER_LOWER_NUMBER = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])+/
-
 const xss = require('xss')
 const bcrypt = require('bcryptjs')
 

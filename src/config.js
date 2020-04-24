@@ -4,5 +4,4 @@ module.exports = {
   DATABASE_URL: process.env.DATABASE_URL || 'postgresql://saraquail@localhost/ff7oa',
   JWT_SECRET: process.env.JWT_SECRET || '@5oi2h4o2380s9#56adiw',
   TEST_DATABASE_URL: process.env.DATABASE_URL || 'postgresql://saraquail@localhost/ff7oa_test',
-
 }
