@@ -35,7 +35,7 @@ const UsersService = {
     return db
       .from('ff7oa_users AS users')
       .select('users.id')
-      .where({user_name})
+      .where('user_name', user_name)
       .first()
   },
 

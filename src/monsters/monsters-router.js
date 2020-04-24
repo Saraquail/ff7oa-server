@@ -40,7 +40,6 @@ monstersRouter
     user_id = UsersService.getUserIdByName(req.app.get('db'), user_name)
 
     newMonster.user_id = user_id
-
     MonstersService.doesMonsterExist(
       req.app.get('db'), name)
       .then(doesMonsterExist => {
@@ -57,6 +56,7 @@ monstersRouter
           newMonster
         )
           .then(monster => {
+            console.log(monster)
             res
               .status(201)
               .location(path.posix.join(req.originalUrl, `/${monster.id}`))
