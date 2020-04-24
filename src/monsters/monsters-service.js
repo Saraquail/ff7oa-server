@@ -47,7 +47,7 @@ const MonstersService = {
       id: monster.id,
       user_id: monster.user_id,
       ...(user_name ? { user_name } : {}),
-      // user_name: xss(user_name),
+      user_name: xss(user_name),
       name: xss(monster.name),
       hp: monster.hp,
       mp: monster.mp,

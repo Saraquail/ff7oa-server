@@ -56,7 +56,6 @@ monstersRouter
           newMonster
         )
           .then(monster => {
-            console.log(monster)
             res
               .status(201)
               .location(path.posix.join(req.originalUrl, `/${monster.id}`))
