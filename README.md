@@ -2,18 +2,19 @@
 
 ## Link to live app: https://ff7-companion-app.saraquail.now.sh/
 
-## Endpoints
+### Endpoints
 
-/users/ GET POST 
-/users/:id 
-/monsters
-/guides/: GET POST DELETE
+/users/ POST 
+/monsters GET POST
+/monsters/:monster_id POST
+/guides/:user_name GET POST 
+/guides/:user_name/:guide_id DELETE
 
 
 ### Technologies
 
-This app was built using React, CSS3, and HTML5
-The server was built using Node.js, Express, and Knex
-The database was built using PostgreSQL
+This app was built using React, CSS3, and HTML5.
+The server was built using Node.js, Express, and Knex.
+The database was built using PostgreSQL.
 
 
