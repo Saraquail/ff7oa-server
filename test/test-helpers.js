@@ -105,6 +105,7 @@ const jwt = require('jsonwebtoken')
     return {
       id: monster.id,
       user_id: user.id,
+      user_name: user.user_name,
       name: monster.name,
       hp: monster.hp,
       mp: monster.mp,
@@ -140,12 +141,13 @@ const jwt = require('jsonwebtoken')
 
     const expectedMonster = {
       ...makeExpectedMonster([user], maliciousMonster),
+      name: 'evil &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
       weakness: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
-      strength: '&lt;script&gt;alert(\"xss\");&lt;/script&gt',
-      location: '&lt;script&gt;alert(\"xss\");&lt;/script&gt',
-      steal: '&lt;script&gt;alert(\"xss\");&lt;/script&gt',
-      drops: '&lt;script&gt;alert(\"xss\");&lt;/script&gt',
-      enemy_skill: '&lt;script&gt;alert(\"xss\");&lt;/script&gt'
+      strength: 'evil &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
+      location: 'evil &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
+      steal: 'evil &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
+      drops: 'evil &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
+      enemy_skill: 'evil &lt;script&gt;alert(\"xss\");&lt;/script&gt;'
     }
 
     return {
@@ -187,12 +189,6 @@ const jwt = require('jsonwebtoken')
     return db
       .into('ff7oa_users')
       .insert(preppedUsers)
-      // .then(() => 
-      //   //update auto sequence to stay in sync
-      //   db.raw(
-      //     `SELECT setval ('ff7oa_users')`, [users[users.length - 1].id]
-      //   )
-      // )
   }
 
   function seedMonstersTables(db, users, monsters) {

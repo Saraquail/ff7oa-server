@@ -39,7 +39,6 @@ const UsersService = {
       .first()
   },
 
-
   insertUser(db, newUser) {
     return db
       .insert(newUser)

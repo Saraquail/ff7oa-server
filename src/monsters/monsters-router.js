@@ -16,14 +16,18 @@ monstersRouter
       req.app.get('db')
     )
       .then(monsters => {
-        res.json(monsters)
+        res.json(monsters.map(MonstersService.serializeMonster))
       })
       .catch(next)
   })
 
   .post(requireAuth, parser, (req, res, next) => {
-    const { name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill } = req.body.monster
-    const newMonster = { name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill }
+    const { 
+      monster: { name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill },
+      user_name
+    } = req.body;
+    
+    let newMonster = { name, hp, mp, exp, gil, weakness, strength, location, level, steal, drops, enemy_skill };
 
     for (const [key, value] of Object.entries(newMonster)) {
       if (!value)
@@ -31,9 +35,9 @@ monstersRouter
           error: `Missing '${key}'`
         })}
     }
-    newMonster.id = req.body.id
+    // newMonster.id = req.body.id
 
-    user_id = UsersService.getUserIdByName(req.app.get('db'), req.body.user_name)
+    user_id = UsersService.getUserIdByName(req.app.get('db'), user_name)
 
     newMonster.user_id = user_id
 
@@ -45,6 +49,8 @@ monstersRouter
             error: 'Monster already exists'
           })
         }
+
+        newMonster = MonstersService.serializeMonster(newMonster)
       
         MonstersService.insertMonster(
           req.app.get('db'),
@@ -54,7 +60,7 @@ monstersRouter
             res
               .status(201)
               .location(path.posix.join(req.originalUrl, `/${monster.id}`))
-              .json(MonstersService.serializeMonster(monster))
+              .json({ ...monster, user_name })
           })
       })
       .catch(next)

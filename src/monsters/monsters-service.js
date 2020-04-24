@@ -42,23 +42,12 @@ const MonstersService = {
   },
 
   serializeMonster(monster) {
-    // const { user_id } = monster
-    return {
-      id: monster.id,
-      user_id: monster.user_id,
-      name: xss(monster.name),
-      hp: monster.hp,
-      mp: monster.mp,
-      exp: monster.exp,
-      gil: monster.gil,
-      weakness: xss(monster.weakness),
-      strength: xss(monster.strength),
-      location: xss(monster.location),
-      level: monster.level,
-      steal: xss(monster.steal),
-      drops: xss(monster.drops),
-      enemy_skill: xss(monster.enemy_skill),
-    }
+    return Object.entries(monster)
+      // sanitize all values
+      .map(([key, value]) => [key, xss(value)])
+      // return them back as an object
+      .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+    
   },
 
   insertMonster(db, newMonster) {
