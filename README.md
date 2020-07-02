@@ -10,7 +10,7 @@
 /guides/:user_name GET POST
 /guides/:user_name/:guide_id DELETE
 
-While you do list the endpoints that your server code exposes, and the assignment doesn't specify the level of detail needed for that documentation, it would be beneficial to add some more information - e.g. some context around each endpoint, a sample of the returned data, and possible errors that could be returned.
+ <!-- add some more information - e.g. some context around each endpoint, a sample of the returned data, and possible errors that could be returned. -->
 
 ### Technologies
 
