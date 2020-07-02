@@ -24,7 +24,7 @@ const UsersService = {
   },
 
   doesUserExist(db, user_name) {
-    return db('ff7oa_users')
+    return db('users')
       .where({ user_name })
       .first()
       .then(user => !!user)
@@ -32,7 +32,7 @@ const UsersService = {
 
   getUserIdByName(db, user_name) {
     return db
-      .from('ff7oa_users AS users')
+      .from('users')
       .select('users.id')
       .where('user_name', user_name)
       .first()
@@ -41,7 +41,7 @@ const UsersService = {
   insertUser(db, newUser) {
     return db
       .insert(newUser)
-      .into('ff7oa_users')
+      .into('users')
       .returning('*')
       .then(([user]) => user)
   },

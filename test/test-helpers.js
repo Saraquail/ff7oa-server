@@ -172,9 +172,9 @@ const jwt = require('jsonwebtoken')
     return db.transaction(trx => 
       trx.raw(
         `TRUNCATE
-        ff7oa_users,
-        ff7oa_monsters,
-        ff7oa_guides`
+        users,
+        monsters,
+        guides`
       )
         
     )
@@ -187,7 +187,7 @@ const jwt = require('jsonwebtoken')
     }))
 
     return db
-      .into('ff7oa_users')
+      .into('users')
       .insert(preppedUsers)
   }
 
@@ -195,7 +195,7 @@ const jwt = require('jsonwebtoken')
     //group queries and rollback on failure
     return db.transaction(async trx => {
       await seedUsers(trx, users)
-      await trx.into('ff7oa_monsters').insert(monsters)
+      await trx.into('monsters').insert(monsters)
     })
   }
 
@@ -203,7 +203,7 @@ const jwt = require('jsonwebtoken')
     return seedUsers(db, [user])
       .then(() => 
         db  
-          .into('ff7oa_monsters')
+          .into('monsters')
           .insert([monster])
       )
   }

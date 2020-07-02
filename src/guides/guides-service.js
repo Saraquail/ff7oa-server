@@ -3,7 +3,7 @@ const xss = require('xss')
 const GuidesService = {
   getAllGuides(db, user_id) {
     return db
-      .from('ff7oa_guides AS guide')
+      .from('guides AS guide')
       .select(
         'guide.id',
         'user_id',
@@ -27,13 +27,13 @@ const GuidesService = {
   insertGuide(db, newGuide) {
     return db
       .insert(newGuide)
-      .into('ff7oa_guides')
+      .into('guides')
       .returning('*')
       .then(([guide]) => guide)
   },
   
   deleteGuide(db, id) {
-    return db('ff7oa_guides')
+    return db('guides')
       .where({ id })
       .first()
       .delete()

@@ -52,7 +52,7 @@ describe('Guides Endpoints', () => {
         })
         .expect(res => 
           db
-            .from('ff7oa_guides')
+            .from('guides')
             .select('*')
             .where({ id: res.body.id })
             .first()

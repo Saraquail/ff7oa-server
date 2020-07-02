@@ -20,9 +20,9 @@ const MonstersService = {
       'mon.enemy_skill',
       'usr.user_name'
       )
-      .from('ff7oa_monsters AS mon')
+      .from('monsters AS mon')
       .leftJoin(
-        'ff7oa_users AS usr',
+        'users AS usr',
         'mon.user_id',
         'usr.id'
         )
@@ -35,7 +35,7 @@ const MonstersService = {
   },
 
   doesMonsterExist(db, name) {
-    return db('ff7oa_monsters')
+    return db('monsters')
       .where({ name })
       .first()
       .then(monster => !!monster)
@@ -66,7 +66,7 @@ const MonstersService = {
   insertMonster(db, newMonster) {
     return db
       .insert(newMonster)
-      .into('ff7oa_monsters')
+      .into('monsters')
       .returning('*')
       .then(([monster]) => monster)
       .then(monster => 

@@ -1,1 +1,0 @@
-DROP TABLE IF EXISTS ff7oa_users;
