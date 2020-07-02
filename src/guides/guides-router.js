@@ -14,7 +14,7 @@ guidesRouter
     const user_name = req.params.user_name
     
     user_id = UsersService.getUserIdByName(req.app.get('db'), user_name)
-
+    //you should refactor to make this a single database query
     GuidesService.getAllGuides(req.app.get('db'), user_id)
       .then(guide => {
         res.json(guide)
