@@ -1,7 +1,6 @@
 const express = require("express");
 const path = require("path");
 const MonstersService = require("./monsters-service");
-const UsersService = require("../users/users-service");
 const { requireAuth } = require("../middleware/jwt-auth");
 const monstersRouter = express.Router();
 const parser = express.json();

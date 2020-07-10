@@ -5,6 +5,9 @@ const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const app = express()
 const monstersRouter = require('./monsters/monsters-router')
+const limitsRouter = require('./limits/limits-router')
+const weaponsRouter = require('./weapons/weapons-router')
+const materiaRouter = require('./materia/materia-router')
 const guidesRouter = require('./guides/guides-router')
 const usersRouter = require('./users/users-router')
 const authRouter = require('./auth/auth-router')
@@ -18,7 +21,11 @@ app.use(cors())
 app.use('/api/monsters', monstersRouter)
 app.use('/api/guides', guidesRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/limits', limitsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/weapons', weaponsRouter)
+app.use('/api/materia', materiaRouter)
+
 
 app.use((error, req, res, next) => {
   let message
