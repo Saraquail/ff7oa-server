@@ -6,8 +6,9 @@ const weaponsRouter = express.Router();
 const parser = express.json();
 
 weaponsRouter.route("/").get(async (req, res, next) => {
+  const db = req.app.get("db")
   try {
-    const weapons = await WeaponsService.getAllItems(req.app.get("db"));
+    const weapons = await WeaponsService.getAllItems(db);
 
     res.json(weapons.map(WeaponsService.serializeWeapon));
   } catch (error) {
