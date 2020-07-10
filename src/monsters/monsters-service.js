@@ -1,43 +1,21 @@
-const xss = require('xss')
+const xss = require("xss");
+const Service = require('../base-service');
 
-const MonstersService = {
-  getAllMonsters(db) {
-    return db
-      .select(
-      'mon.id',
-      'mon.name',
-      'mon.hp',
-      'mon.mp',
-      'mon.exp',
-      'mon.ap',
-      'mon.gil',
-      'mon.weakness',
-      'mon.strength',
-      'mon.location',
-      'mon.level',
-      'mon.steal',
-      'mon.drops',
-      'mon.morph',
-      'mon.enemy_skill',
-      )
-      .from('monsters AS mon')
-  },
 
-  getById(db, id) {
-    return MonstersService.getAllMonsters(db)
-      .where('mon.id', id)
-      .first()
-  },
+class MonstersService extends Service {
+
+  constructor(table_name) {
+    super(table_name);
+  }
 
   doesMonsterExist(db, name) {
-    return db('monsters')
+    return db("monsters")
       .where({ name })
       .first()
-      .then(monster => !!monster)
-  },
+      .then((monster) => !!monster);
+  }
 
   serializeMonster(monster) {
-    
     return {
       id: monster.id,
       name: xss(monster.name),
@@ -54,19 +32,8 @@ const MonstersService = {
       drops: xss(monster.drops),
       morph: xss(monster.morph),
       enemy_skill: xss(monster.enemy_skill),
-    }
-  },
+    };
+  }
+};
 
-  insertMonster(db, newMonster) {
-    return db
-      .insert(newMonster)
-      .into('monsters')
-      .returning('*')
-      .then(([monster]) => monster)
-      .then(monster => 
-        MonstersService.getById(db, monster.id)
-        )
-  },
-}
-
-module.exports = MonstersService
+module.exports = new MonstersService('monsters');

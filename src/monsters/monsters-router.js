@@ -9,14 +9,16 @@ monstersRouter
   .route("/")
 
   .get((req, res, next) => {
-    MonstersService.getAllMonsters(req.app.get("db"))
+    const db = req.app.get("db");
+    MonstersService.getAllItems(db)
       .then((monsters) => {
         res.json(monsters.map(MonstersService.serializeMonster));
       })
       .catch(next);
   })
 
-  .post(requireAuth, parser, (req, res, next) => {
+  .post(requireAuth, parser, async (req, res, next) => {
+    const db = req.app.get("db");
     let newMonster = req.body;
 
     for (const [key, value] of Object.entries(newMonster)) {
@@ -26,33 +28,35 @@ monstersRouter
         });
       }
     }
+    try {
+      const doesMonsterExist = await MonstersService.doesMonsterExist(
+        db,
+        newMonster.name
+      );
 
-    MonstersService.doesMonsterExist(req.app.get("db"), newMonster.name)
-      .then((doesMonsterExist) => {
-        if (doesMonsterExist) {
-          return res.status(400).json({
-            error: "Monster already exists",
-          });
-        }
+      if (doesMonsterExist) {
+        return res.status(400).json({
+          error: "Monster already exists",
+        });
+      }
 
-        newMonster = MonstersService.serializeMonster(newMonster);
+      newMonster = await MonstersService.serializeMonster(newMonster);
 
-        MonstersService.insertMonster(req.app.get("db"), newMonster).then(
-          (monster) => {
-            res
-              .status(201)
-              .location(path.posix.join(req.originalUrl, `/${monster.id}`))
-              .json({ monster });
-          }
-        );
-      })
-      .catch(next);
+      const monster = await MonstersService.insertItem(db, newMonster)
+        res
+          .status(201)
+          .location(path.posix.join(req.originalUrl, `/${monster.id}`))
+          .json({ monster });
+      } catch (error) {
+      next(error);
+    }
   });
 
 monstersRouter
   .route("/:monster_id")
   .all((req, res, next) => {
-    MonstersService.getById(req.app.get("db"), req.params.monster_id)
+    const db = req.app.get("db");
+    MonstersService.getItemById(db, req.params.monster_id)
       .then((monster) => {
         if (!monster) {
           return res.status(404).json({

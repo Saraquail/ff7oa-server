@@ -21,10 +21,10 @@ app.use(cors())
 app.use('/api/monsters', monstersRouter)
 app.use('/api/guides', guidesRouter)
 app.use('/api/auth', authRouter)
-app.use('/api/limits', limitsRouter)
-app.use('/api/users', usersRouter)
+// app.use('/api/limits', limitsRouter)
+// app.use('/api/users', usersRouter)
 app.use('/api/weapons', weaponsRouter)
-app.use('/api/materia', materiaRouter)
+// app.use('/api/materia', materiaRouter)
 
 
 app.use((error, req, res, next) => {
