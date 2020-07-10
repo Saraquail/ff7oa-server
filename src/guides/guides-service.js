@@ -3,24 +3,22 @@ const xss = require('xss')
 const GuidesService = {
   getAllGuides(db, user_id) {
     return db
-      .from('guides AS guide')
+      .from('guides')
       .select(
-        'guide.id',
-        'user_id',
-        'guide.name',
-        'guide.note',
-        'guide.monster_id'
+        'guides.id',
+        'guides.name',
+        'guides.note',
+        'guides.walkthrough_id'
       )
-      .where('guide.user_id', user_id)
+      .where('guides.user_id', user_id)
   },
 
   serializeGuides(guide) {
     return {
       id: guide.id,
-      user_id: guide.user_id,
       name: xss(guide.name),
       note: xss(guide.note),
-      monster_id: guide.monster_id
+      walkthrough_id: guide.walkthrough_id
     }
   },
 

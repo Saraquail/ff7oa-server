@@ -52,9 +52,9 @@ VALUES
   'Once at the hot springs, go south. You will come across an area with four exits. Take the path to the northeast, it is a one-way path. On the second screen you will see a hilly area with bare rock exposed. The added-cut materia is on the upper edge of this screen. It blends in with the snow, but will shimmer every few seconds.');
 
 INSERT INTO "guides" 
-  ("walkthrough_id", "name", "note")
+  ("user_id","walkthrough_id", "name", "note")
   VALUES
-  (1, 'next boss', 'watch out for the cannons'),
-  (1, 'Rufio', 'a very unkind man');
+  (1, 1, 'next boss', 'watch out for the cannons'),
+  (1, 1, 'Rufio', 'a very unkind man');
 
 COMMIT;
