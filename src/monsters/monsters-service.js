@@ -5,11 +5,11 @@ const MonstersService = {
     return db
       .select(
       'mon.id',
-      'mon.user_id',
       'mon.name',
       'mon.hp',
       'mon.mp',
       'mon.exp',
+      'mon.ap',
       'mon.gil',
       'mon.weakness',
       'mon.strength',
@@ -17,15 +17,10 @@ const MonstersService = {
       'mon.level',
       'mon.steal',
       'mon.drops',
+      'mon.morph',
       'mon.enemy_skill',
-      'usr.user_name'
       )
       .from('monsters AS mon')
-      .leftJoin(
-        'users AS usr',
-        'mon.user_id',
-        'usr.id'
-        )
   },
 
   getById(db, id) {
@@ -41,17 +36,15 @@ const MonstersService = {
       .then(monster => !!monster)
   },
 
-  serializeMonster({ user_name, ...monster }) {
+  serializeMonster(monster) {
     
     return {
       id: monster.id,
-      user_id: monster.user_id,
-      ...(user_name ? { user_name } : {}),
-      user_name: xss(user_name),
       name: xss(monster.name),
       hp: monster.hp,
       mp: monster.mp,
       exp: monster.exp,
+      ap: monster.ap,
       gil: monster.gil,
       weakness: xss(monster.weakness),
       strength: xss(monster.strength),
@@ -59,6 +52,7 @@ const MonstersService = {
       level: monster.level,
       steal: xss(monster.steal),
       drops: xss(monster.drops),
+      morph: xss(monster.morph),
       enemy_skill: xss(monster.enemy_skill),
     }
   },
