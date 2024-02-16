@@ -1,6 +1,7 @@
 # Server for Unofficial Final Fantasy 7 Companion App
 
 ## Link to live app: https://ff7-companion-app.saraquail.now.sh/
+database no longer operational
 
 ### Endpoints
 
